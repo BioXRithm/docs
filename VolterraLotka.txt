@@ -1,0 +1,36 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import odeint
+
+# Definir las ecuaciones del modelo Volterra-Lotka
+def volterra_lotka(X, t, alpha, beta, delta, gamma):
+    x, y = X
+    dxdt = alpha*x - beta*x*y
+    dydt = delta*x*y - gamma*y
+    return [dxdt, dydt]
+
+# Parámetros del modelo
+alpha = 1.1   # Tasa de crecimiento de la presa
+beta = 0.4    # Tasa a la que los depredadores consumen presas
+delta = 0.1   # Tasa a la que los depredadores se reproducen al consumir presas
+gamma = 0.4   # Tasa de mortalidad de los depredadores
+
+# Condiciones iniciales
+X0 = [40, 9]  # Población inicial de presas y depredadores
+
+# Intervalo de tiempo
+t = np.linspace(0, 50, 500)
+
+# Resolver las ecuaciones diferenciales
+sol = odeint(volterra_lotka, X0, t, args=(alpha, beta, delta, gamma))
+
+# Graficar los resultados
+plt.figure(figsize=(10, 5))
+plt.plot(t, sol[:, 0], label='Presas')
+plt.plot(t, sol[:, 1], label='Depredadores')
+plt.xlabel('Tiempo')
+plt.ylabel('Población')
+plt.title('Modelo Volterra-Lotka')
+plt.legend()
+plt.grid()
+plt.show()
